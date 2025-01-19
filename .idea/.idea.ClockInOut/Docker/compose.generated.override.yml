@@ -1,0 +1,20 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  clockapi:
+    build:
+      context: "/Users/shalinda/Documents/repo/ClockInOut"
+      dockerfile: "ClockAPI/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/ClockAPI.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "clockapi:dev"
+    ports: []
+    volumes:
+    - "/Users/shalinda/Documents/repo/ClockInOut/ClockAPI:/app:rw"
+    - "/Users/shalinda/Documents/repo/ClockInOut:/src:rw"
+    - "/Users/shalinda/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"

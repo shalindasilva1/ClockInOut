@@ -1,0 +1,27 @@
+﻿services:
+  clockapi:
+    image: clockapi
+    build:
+      context: .
+      dockerfile: ClockAPI/Dockerfile
+    ports:
+        - "5128:5128"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=clockinoutdb;Username=postgres;Password=mysecretpassword
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: clockinoutdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -1,0 +1,6 @@
+@ClockAPI_HostAddress = http://localhost:5128
+
+GET {{ClockAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
