@@ -56,11 +56,3 @@ Desktop.ini
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
-
-# VS Code directories
-.vscode/
-.vscode/*
-
-# Rider directories
-.idea/
-.idea/*
