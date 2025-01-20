@@ -5,7 +5,7 @@
       context: .
       dockerfile: ClockAPI/Dockerfile
     ports:
-        - "5128:5128"
+      - "5128:5128"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=clockinoutdb;Username=postgres;Password=mysecretpassword
