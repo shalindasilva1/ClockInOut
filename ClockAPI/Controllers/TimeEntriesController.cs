@@ -3,7 +3,8 @@ using ClockAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClockAPI.Controllers;
-
+[ApiController]
+[Route("[controller]")]
 public class TimeEntriesController(TimeEntryService timeEntryService) : Controller
 {
     [HttpGet]

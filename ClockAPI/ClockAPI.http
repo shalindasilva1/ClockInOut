@@ -4,3 +4,4 @@ GET {{ClockAPI_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+GET {{ClockAPI_HostAddress}}/TimeEntries/
