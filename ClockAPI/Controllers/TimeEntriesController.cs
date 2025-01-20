@@ -7,28 +7,26 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClockAPI.Controllers;
 [ApiController]
 [Route("[controller]")]
-public class TimeEntriesController(
-    ITimeEntryService timeEntryService,
-    IMapper mapper) : Controller
+public class TimeEntriesController(ITimeEntryService timeEntryService) : Controller
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TimeEntryDto>>> GetTimeEntries()
     {
         var timeEntries = await timeEntryService.GetAllTimeEntriesAsync();
-        return Ok(mapper.Map<IEnumerable<TimeEntryDto>>(timeEntries));
+        return Ok(timeEntries);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TimeEntryDto>> GetTimeEntry(int id)
     {
-        return await timeEntryService.GetTimeEntryByIdAsync(id) is { } timeEntry ? mapper.Map<TimeEntryDto>(timeEntry) : NotFound();
+        return await timeEntryService.GetTimeEntryByIdAsync(id) is { } timeEntry ? timeEntry : NotFound();
     }
     
     [HttpGet("user/{userId}")]
     public async Task<ActionResult<IEnumerable<TimeEntryDto>>> GetTimeEntriesByUserId(int userId)
     {
         var timeEntries = await timeEntryService.GetTimeEntriesByUserIdAsync(userId);
-        return Ok(mapper.Map<IEnumerable<TimeEntryDto>>(timeEntries));
+        return Ok(timeEntries);
     }
     
     [HttpPost]
@@ -38,7 +36,7 @@ public class TimeEntriesController(
         {
             return BadRequest();
         }
-        await timeEntryService.AddTimeEntryAsync(mapper.Map<TimeEntry>(timeEntry));
+        await timeEntryService.AddTimeEntryAsync(timeEntry);
         return CreatedAtAction(nameof(GetTimeEntry), new { id = timeEntry.Id }, timeEntry);
     }
     
@@ -50,7 +48,7 @@ public class TimeEntriesController(
             return BadRequest();
         }
 
-        await timeEntryService.UpdateTimeEntryAsync(mapper.Map<TimeEntry>(timeEntry));
+        await timeEntryService.UpdateTimeEntryAsync(timeEntry);
 
         return NoContent();
     }

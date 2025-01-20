@@ -12,6 +12,19 @@
     depends_on:
       - postgres
 
+  userapi:
+    image: userapi
+    build:
+      context: .
+      dockerfile: UserAPI/Dockerfile
+    ports:
+      - "5203:5203"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=clockinoutdb;Username=postgres;Password=mysecretpassword
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:latest
     environment:
@@ -25,8 +38,3 @@
 
 volumes:
   postgres_data:
-  userapi:
-    image: userapi
-    build:
-      context: .
-      dockerfile: UserAPI/Dockerfile
