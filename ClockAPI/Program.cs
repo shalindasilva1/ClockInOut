@@ -19,11 +19,11 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<ClockInOutDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register the TimeEntryService
-builder.Services.AddScoped<ITimeEntryService, TimeEntryService>();
-
 // Register the TimeEntryRepository
 builder.Services.AddScoped<ITimeEntryRepository, TimeEntryRepository>();
+
+// Register the TimeEntryService
+builder.Services.AddScoped<ITimeEntryService, TimeEntryService>();
 
 var app = builder.Build();
 

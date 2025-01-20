@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClockAPI.Controllers;
 [ApiController]
 [Route("[controller]")]
-public class TimeEntriesController(TimeEntryService timeEntryService) : Controller
+public class TimeEntriesController(ITimeEntryService timeEntryService) : Controller
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntries()
