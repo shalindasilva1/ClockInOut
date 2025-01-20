@@ -1,46 +1,56 @@
+using AutoMapper;
 using ClockAPI.Models;
+using ClockAPI.Models.DTOs;
 using ClockAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClockAPI.Controllers;
 [ApiController]
 [Route("[controller]")]
-public class TimeEntriesController(ITimeEntryService timeEntryService) : Controller
+public class TimeEntriesController(
+    ITimeEntryService timeEntryService,
+    IMapper mapper) : Controller
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntries()
+    public async Task<ActionResult<IEnumerable<TimeEntryDto>>> GetTimeEntries()
     {
-        return await timeEntryService.GetAllTimeEntriesAsync();
+        var timeEntries = await timeEntryService.GetAllTimeEntriesAsync();
+        return Ok(mapper.Map<IEnumerable<TimeEntryDto>>(timeEntries));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TimeEntry>> GetTimeEntry(int id)
+    public async Task<ActionResult<TimeEntryDto>> GetTimeEntry(int id)
     {
-        return await timeEntryService.GetTimeEntryByIdAsync(id) is { } timeEntry ? timeEntry : NotFound();
+        return await timeEntryService.GetTimeEntryByIdAsync(id) is { } timeEntry ? mapper.Map<TimeEntryDto>(timeEntry) : NotFound();
     }
     
     [HttpGet("user/{userId}")]
-    public async Task<ActionResult<IEnumerable<TimeEntry>>> GetTimeEntriesByUserId(int userId)
+    public async Task<ActionResult<IEnumerable<TimeEntryDto>>> GetTimeEntriesByUserId(int userId)
     {
-        return await timeEntryService.GetTimeEntriesByUserIdAsync(userId);
+        var timeEntries = await timeEntryService.GetTimeEntriesByUserIdAsync(userId);
+        return Ok(mapper.Map<IEnumerable<TimeEntryDto>>(timeEntries));
     }
     
     [HttpPost]
-    public async Task<ActionResult<TimeEntry>> PostTimeEntry(TimeEntry timeEntry)
+    public async Task<ActionResult<TimeEntryDto>> PostTimeEntry(TimeEntryDto timeEntry)
     {
-        await timeEntryService.AddTimeEntryAsync(timeEntry);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest();
+        }
+        await timeEntryService.AddTimeEntryAsync(mapper.Map<TimeEntry>(timeEntry));
         return CreatedAtAction(nameof(GetTimeEntry), new { id = timeEntry.Id }, timeEntry);
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutTimeEntry(int id, TimeEntry timeEntry)
+    public async Task<IActionResult> PutTimeEntry(int id, TimeEntryDto timeEntry)
     {
         if (id != timeEntry.Id)
         {
             return BadRequest();
         }
 
-        await timeEntryService.UpdateTimeEntryAsync(timeEntry);
+        await timeEntryService.UpdateTimeEntryAsync(mapper.Map<TimeEntry>(timeEntry));
 
         return NoContent();
     }

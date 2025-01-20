@@ -1,8 +1,10 @@
 using ClockAPI;
 using ClockAPI.Repositories;
 using ClockAPI.Services;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ClockAPI", Version = "v1" });
 });
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Register the DbContext with PostgreSQL
 builder.Services.AddDbContext<ClockInOutDbContext>(options =>
@@ -24,6 +27,10 @@ builder.Services.AddScoped<ITimeEntryRepository, TimeEntryRepository>();
 
 // Register the TimeEntryService
 builder.Services.AddScoped<ITimeEntryService, TimeEntryService>();
+
+// Register the TimeEntryDtoValidator
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 var app = builder.Build();
 
@@ -41,5 +48,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
