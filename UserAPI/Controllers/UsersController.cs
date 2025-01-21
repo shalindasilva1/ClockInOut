@@ -17,13 +17,29 @@ public class UsersController(IUserService userService) : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUser(int id)
     {
-        return await userService.GetUserByIdAsync(id) is { } user ? user : NotFound();
+        try
+        {
+            var user = await userService.GetUserByIdAsync(id);
+            return user;
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpGet("username/{username}")]
     public async Task<ActionResult<UserDto>> GetUserByUsername(string username)
     {
-        return await userService.GetUserByUsernameAsync(username) is { } user ? user : NotFound();
+        try
+        {
+            var user = await userService.GetUserByUsernameAsync(username);
+            return user;
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpPost]
@@ -33,8 +49,15 @@ public class UsersController(IUserService userService) : Controller
         {
             return BadRequest();
         }
-        var result = await userService.RegisterUserAsync(user);
-        return CreatedAtAction(nameof(GetUser), new { id = result.Id }, user);
+        try
+        {
+            var result = await userService.RegisterUserAsync(user);
+            return CreatedAtAction(nameof(GetUser), new { id = result.Id }, result);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpPut("{id}")]
@@ -45,26 +68,47 @@ public class UsersController(IUserService userService) : Controller
             return BadRequest();
         }
 
-        await userService.UpdateUserAsync(id, user);
-
-        return NoContent();
+        try
+        {
+            await userService.UpdateUserAsync(id, user);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
-        await userService.DeleteUserAsync(id);
-        return NoContent();
+        try
+        {
+            await userService.DeleteUserAsync(id);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+        
     }
     
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(UserDto user)
     {
-        var result = await userService.GetUserByUsernameAsync(user.Username);
-        if (result.PasswordHash == user.PasswordHash)
+        try
         {
-            return Ok(result);
+            var result = await userService.GetUserByUsernameAsync(user.Username);
+            if (result.PasswordHash == user.PasswordHash)
+            {
+                return Ok(result);
+            }
+            return Unauthorized();
         }
-        return Unauthorized();
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }
