@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using UserAPI.Models;
 using UserAPI.Models.DTOs;
 using UserAPI.Repositories;
@@ -7,9 +8,35 @@ namespace UserAPI.Services;
 
 public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
 {
-    public async Task RegisterUserAsync(UserDto userDto)
+    public async Task<User> RegisterUserAsync(UserDtoCreate userDto)
     { 
-        await userRepository.AddAsync(mapper.Map<User>(userDto));
+        // 1. Validation (using FluentValidation)
+        var validator = new UserDtoValidator();
+        var validationResult = await validator.ValidateAsync(userDto);
+
+        if (!validationResult.IsValid)
+        {
+            var errorMessages = validationResult.Errors;
+            throw new ValidationException(errorMessages);
+        }
+        
+        // 2. Check if username or email already exists
+        var existingUser = await userRepository.CheckUserAvailability(userDto.Username, userDto.Email);
+        if (existingUser != null)
+        {
+            throw new Exception("Username or email already exists");
+        }
+        
+        // 3. Hash password (using BCrypt)
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
+
+        // 4. Mapping (using AutoMapper)
+        var user = mapper.Map<User>(userDto);
+        user.PasswordHash = hashedPassword;
+        
+        await userRepository.AddAsync(mapper.Map<User>(user));
+        
+        return user;
     }
 
     public async Task<UserDto> GetUserByIdAsync(int id)

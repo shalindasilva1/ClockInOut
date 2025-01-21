@@ -3,7 +3,7 @@ using UserAPI.Models.DTOs;
 
 namespace UserAPI.Models;
 
-public class UserDtoValidator : AbstractValidator<UserDto>
+public class UserDtoValidator : AbstractValidator<UserDtoCreate>
 {
     public UserDtoValidator()
     {
@@ -12,7 +12,7 @@ public class UserDtoValidator : AbstractValidator<UserDto>
             .MinimumLength(3).WithMessage("Username must be at least 3 characters long.")
             .MaximumLength(50).WithMessage("Username cannot exceed 50 characters.");
 
-        RuleFor(x => x.PasswordHash)
+        RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.")
             .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,100}$").WithMessage("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")
             .MinimumLength(6).WithMessage("Password must be at least 6 characters long.")

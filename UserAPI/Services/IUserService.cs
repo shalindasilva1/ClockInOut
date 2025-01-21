@@ -5,7 +5,7 @@ namespace UserAPI.Services;
 
 public interface IUserService
 {
-    Task RegisterUserAsync(UserDto userDto);
+    Task<User> RegisterUserAsync(UserDtoCreate userDto);
     Task<UserDto> GetUserByIdAsync(int id);
     Task<UserDto> GetUserByUsernameAsync(string username);
     Task<IEnumerable<UserDto>> GetAllUsersAsync();

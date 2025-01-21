@@ -27,14 +27,14 @@ public class UsersController(IUserService userService) : Controller
     }
     
     [HttpPost]
-    public async Task<ActionResult<UserDto>> PostUser(UserDto user)
+    public async Task<ActionResult<UserDto>> PostUser(UserDtoCreate user)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest();
         }
-        await userService.RegisterUserAsync(user);
-        return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+        var result = await userService.RegisterUserAsync(user);
+        return CreatedAtAction(nameof(GetUser), new { id = result.Id }, user);
     }
     
     [HttpPut("{id}")]

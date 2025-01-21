@@ -17,9 +17,26 @@ public class UserRepository(ClockInOutDbContext dbContext) : IUserRepository
     public async Task<User> GetByUsernameAsync(string username)
     {
         var result = await _dbContext.UserEntries
-            .Where(u => u.Username == username)
-            .FirstOrDefaultAsync()
-            ?? throw new Exception("User entry not found");
+                        .Where(u => u.Username == username)
+                        .FirstOrDefaultAsync()
+                     ?? throw new Exception("User entry not found");
+        return result;
+    }
+    
+    public async Task<User> GetByEmailAsync(string userDtoEmail)
+    {
+        var result = await _dbContext.UserEntries
+                         .Where(u => u.Email == userDtoEmail)
+                         .FirstOrDefaultAsync()
+                     ?? throw new Exception("User entry not found");
+        return result;
+    }
+
+    public async Task<User?> CheckUserAvailability(string username, string email)
+    {
+        var result = await _dbContext.UserEntries
+                         .Where(u => u.Username == username || u.Email == email)
+                         .FirstOrDefaultAsync();
         return result;
     }
 
