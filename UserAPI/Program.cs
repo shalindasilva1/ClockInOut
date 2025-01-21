@@ -1,15 +1,14 @@
+using UserAPI;
+using UserAPI.Repositories;
+using UserAPI.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using UserAPI;
-using UserAPI.Repositories;
-using UserAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
@@ -23,13 +22,13 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<ClockInOutDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register the TimeEntryRepository
+// Register the UserRepository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-// Register the TimeEntryService
+// Register the UserService
 builder.Services.AddScoped<IUserService, UserService>();
 
-// Register the TimeEntryDtoValidator
+// Register the UserDtoValidator
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 

@@ -2,9 +2,9 @@ using ClockAPI;
 using ClockAPI.Repositories;
 using ClockAPI.Services;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

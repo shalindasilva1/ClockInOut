@@ -3,7 +3,8 @@ using UserAPI.Models.DTOs;
 using UserAPI.Services;
 
 namespace UserAPI.Controllers;
-
+[ApiController]
+[Route("[controller]")]
 public class UsersController(IUserService userService) : Controller
 {
     [HttpGet]

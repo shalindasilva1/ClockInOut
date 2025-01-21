@@ -27,8 +27,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\ClockAPI\ClockAPI.csproj" />
-    </ItemGroup>
-
 </Project>
