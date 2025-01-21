@@ -12,21 +12,43 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TimeEntryDto>>> GetTimeEntries()
     {
-        var timeEntries = await timeEntryService.GetAllTimeEntriesAsync();
-        return Ok(timeEntries);
+        try
+        {
+            var timeEntries = await timeEntryService.GetAllTimeEntriesAsync();
+            return Ok(timeEntries);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<TimeEntryDto>> GetTimeEntry(int id)
     {
-        return await timeEntryService.GetTimeEntryByIdAsync(id) is { } timeEntry ? timeEntry : NotFound();
+        try
+        {
+            var timeEntry = await timeEntryService.GetTimeEntryByIdAsync(id);
+            return timeEntry;
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpGet("user/{userId}")]
     public async Task<ActionResult<IEnumerable<TimeEntryDto>>> GetTimeEntriesByUserId(int userId)
     {
-        var timeEntries = await timeEntryService.GetTimeEntriesByUserIdAsync(userId);
-        return Ok(timeEntries);
+        try
+        {
+            var timeEntries = await timeEntryService.GetTimeEntriesByUserIdAsync(userId);
+            return Ok(timeEntries);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpPost]
@@ -36,8 +58,16 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
         {
             return BadRequest();
         }
-        await timeEntryService.AddTimeEntryAsync(timeEntry);
-        return CreatedAtAction(nameof(GetTimeEntry), new { id = timeEntry.Id }, timeEntry);
+
+        try
+        {
+            await timeEntryService.AddTimeEntryAsync(timeEntry);
+            return CreatedAtAction(nameof(GetTimeEntry), new { id = timeEntry.Id }, timeEntry);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpPut("{id}")]
@@ -47,16 +77,29 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
         {
             return BadRequest();
         }
-
-        await timeEntryService.UpdateTimeEntryAsync(timeEntry);
-
-        return NoContent();
+        
+        try
+        {
+            await timeEntryService.UpdateTimeEntryAsync(timeEntry);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTimeEntry(int id)
     {
-        await timeEntryService.DeleteTimeEntryAsync(id);
-        return NoContent();
+        try
+        {
+            await timeEntryService.DeleteTimeEntryAsync(id);
+            return NoContent();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }
