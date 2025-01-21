@@ -8,7 +8,7 @@ namespace UserAPI.Services;
 
 public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
 {
-    public async Task<User> RegisterUserAsync(UserDtoCreate userDto)
+    public async Task<UserDto> RegisterUserAsync(UserDtoCreate userDto)
     { 
         // 1. Validation (using FluentValidation)
         var validator = new UserDtoValidator();
@@ -36,7 +36,23 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         
         await userRepository.AddAsync(mapper.Map<User>(user));
         
-        return user;
+        return mapper.Map<UserDto>(user);
+    }
+
+    public async Task<UserDto> LoginUserAsync(UserDtoLogin userDto)
+    {
+        var user = await userRepository.GetByUsernameAsync(userDto.Username);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
+        {
+            throw new Exception("Invalid password");
+        }
+
+        return mapper.Map<UserDto>(user);
     }
 
     public async Task<UserDto> GetUserByIdAsync(int id)

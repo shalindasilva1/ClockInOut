@@ -3,6 +3,7 @@ using UserAPI.Models.DTOs;
 using UserAPI.Services;
 
 namespace UserAPI.Controllers;
+
 [ApiController]
 [Route("[controller]")]
 public class UsersController(IUserService userService) : Controller
@@ -95,16 +96,12 @@ public class UsersController(IUserService userService) : Controller
     }
     
     [HttpPost("login")]
-    public async Task<ActionResult<UserDto>> Login(UserDto user)
+    public async Task<ActionResult<UserDto>> Login(UserDtoLogin user)
     {
         try
         {
-            var result = await userService.GetUserByUsernameAsync(user.Username);
-            if (result.PasswordHash == user.PasswordHash)
-            {
-                return Ok(result);
-            }
-            return Unauthorized();
+            var result = await userService.LoginUserAsync(user) ?? throw new Exception("User not found");
+            return result;
         }
         catch (Exception e)
         {
