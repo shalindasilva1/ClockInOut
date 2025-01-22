@@ -1,12 +1,19 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.IdentityModel.Tokens;
 using UserAPI.Models;
 using UserAPI.Models.DTOs;
 using UserAPI.Repositories;
 
 namespace UserAPI.Services;
 
-public class UserService(IUserRepository userRepository, IMapper mapper) : IUserService
+public class UserService(
+    IUserRepository userRepository, 
+    IConfiguration configuration,
+    IMapper mapper) : IUserService
 {
     public async Task<UserDto> RegisterUserAsync(UserDtoCreate userDto)
     { 
@@ -39,7 +46,7 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         return mapper.Map<UserDto>(user);
     }
 
-    public async Task<UserDto> LoginUserAsync(UserDtoLogin userDto)
+    public async Task<string> LoginUserAsync(UserDtoLogin userDto)
     {
         var user = await userRepository.GetByUsernameAsync(userDto.Username);
         if (user == null)
@@ -51,8 +58,24 @@ public class UserService(IUserRepository userRepository, IMapper mapper) : IUser
         {
             throw new Exception("Invalid password");
         }
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username),
+            }),
+            Expires = DateTime.UtcNow.AddHours(1),
+            Issuer = configuration["Jwt:Issuer"],
+            Audience = configuration["Jwt:Audience"],
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var tokenString = tokenHandler.WriteToken(token);
 
-        return mapper.Map<UserDto>(user);
+        return tokenString;
     }
 
     public async Task<UserDto> GetUserByIdAsync(int id)

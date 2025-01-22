@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserAPI.Models.DTOs;
 using UserAPI.Services;
@@ -8,6 +9,7 @@ namespace UserAPI.Controllers;
 [Route("[controller]")]
 public class UsersController(IUserService userService) : Controller
 {
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
     {
@@ -15,6 +17,7 @@ public class UsersController(IUserService userService) : Controller
         return Ok(users);
     }
     
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUser(int id)
     {
@@ -29,6 +32,7 @@ public class UsersController(IUserService userService) : Controller
         }
     }
     
+    [Authorize]
     [HttpGet("username/{username}")]
     public async Task<ActionResult<UserDto>> GetUserByUsername(string username)
     {
@@ -43,6 +47,7 @@ public class UsersController(IUserService userService) : Controller
         }
     }
     
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<UserDto>> PostUser(UserDtoCreate user)
     {
@@ -61,6 +66,7 @@ public class UsersController(IUserService userService) : Controller
         }
     }
     
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(int id, UserDto user)
     {
@@ -80,6 +86,7 @@ public class UsersController(IUserService userService) : Controller
         }
     }
     
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
@@ -96,12 +103,12 @@ public class UsersController(IUserService userService) : Controller
     }
     
     [HttpPost("login")]
-    public async Task<ActionResult<UserDto>> Login(UserDtoLogin user)
+    public async Task<ActionResult> Login(UserDtoLogin user)
     {
         try
         {
             var result = await userService.LoginUserAsync(user) ?? throw new Exception("User not found");
-            return result;
+            return Ok(new {token = result});
         }
         catch (Exception e)
         {
