@@ -1,33 +1,40 @@
+using AutoMapper;
 using ClockAPI.Models;
+using ClockAPI.Models.DTOs;
 using ClockAPI.Repositories;
 
 namespace ClockAPI.Services;
 
-public class TimeEntryService(ITimeEntryRepository timeEntryRepository) : ITimeEntryService
+public class TimeEntryService(
+    ITimeEntryRepository timeEntryRepository,
+    IMapper mapper) : ITimeEntryService
 {
-    public async Task AddTimeEntryAsync(TimeEntry timeEntry)
+    public async Task AddTimeEntryAsync(TimeEntryDto timeEntry)
     {
-        await timeEntryRepository.AddAsync(timeEntry);
+        await timeEntryRepository.AddAsync(mapper.Map<TimeEntry>(timeEntry));
     }
 
-    public async Task UpdateTimeEntryAsync(TimeEntry timeEntry)
+    public async Task UpdateTimeEntryAsync(TimeEntryDto timeEntry)
     {
-        await timeEntryRepository.UpdateAsync(timeEntry);
+        await timeEntryRepository.UpdateAsync(mapper.Map<TimeEntry>(timeEntry));
     }
 
-    public async Task<TimeEntry> GetTimeEntryByIdAsync(int id)
+    public async Task<TimeEntryDto> GetTimeEntryByIdAsync(int id)
     {
-        return await timeEntryRepository.GetByIdAsync(id);
+        var result = await timeEntryRepository.GetByIdAsync(id);
+        return mapper.Map<TimeEntryDto>(result);
     }
 
-    public async Task<List<TimeEntry>> GetAllTimeEntriesAsync()
+    public async Task<List<TimeEntryDto>> GetAllTimeEntriesAsync()
     {
-        return await timeEntryRepository.GetAllAsync();
+        var result = await timeEntryRepository.GetAllAsync();
+        return mapper.Map<List<TimeEntryDto>>(result);
     }
 
-    public async Task<List<TimeEntry>> GetTimeEntriesByUserIdAsync(int userId)
+    public async Task<List<TimeEntryDto>> GetTimeEntriesByUserIdAsync(int userId)
     {
-        return await timeEntryRepository.GetByUserIdAsync(userId);
+        var result = await timeEntryRepository.GetByUserIdAsync(userId);
+        return mapper.Map<List<TimeEntryDto>>(result);
     }
 
     public async Task DeleteTimeEntryAsync(int id)
