@@ -1,7 +1,7 @@
 using System.Text;
-using ClockAPI;
-using ClockAPI.Repositories;
-using ClockAPI.Services;
+using UserAPI;
+using UserAPI.Repositories;
+using UserAPI.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ClockAPI", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserAPI", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
@@ -49,16 +49,17 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<ClockInOutDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Register the TimeEntryRepository
-builder.Services.AddScoped<ITimeEntryRepository, TimeEntryRepository>();
+// Register the UserRepository
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-// Register the TimeEntryService
-builder.Services.AddScoped<ITimeEntryService, TimeEntryService>();
+// Register the UserService
+builder.Services.AddScoped<IUserService, UserService>();
 
-// Register the TimeEntryDtoValidator
+// Register the UserDtoValidator
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
+// JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -68,9 +69,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"], // Same as User API's issuer
-            ValidAudience = builder.Configuration["Jwt:Audience"], // Same as User API's audience
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])) // Same as User API's key
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 
@@ -85,7 +86,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClockAPI v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "UserAPI v1");
     });
 }
 

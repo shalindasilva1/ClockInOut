@@ -1,13 +1,14 @@
 using ClockAPI.Models;
+using ClockAPI.Models.DTOs;
 
 namespace ClockAPI.Services;
 
 public interface ITimeEntryService
 {
-    Task AddTimeEntryAsync(TimeEntry timeEntry);
-    Task UpdateTimeEntryAsync(TimeEntry timeEntry);
-    Task<TimeEntry> GetTimeEntryByIdAsync(int id);
-    Task<List<TimeEntry>> GetAllTimeEntriesAsync();
-    Task<List<TimeEntry>> GetTimeEntriesByUserIdAsync(int userId);
+    Task AddTimeEntryAsync(TimeEntryDto timeEntry);
+    Task UpdateTimeEntryAsync(TimeEntryDto timeEntry);
+    Task<TimeEntryDto> GetTimeEntryByIdAsync(int id);
+    Task<List<TimeEntryDto>> GetAllTimeEntriesAsync();
+    Task<List<TimeEntryDto>> GetTimeEntriesByUserIdAsync(int userId);
     Task DeleteTimeEntryAsync(int id);
 }
