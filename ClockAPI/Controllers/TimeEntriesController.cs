@@ -2,10 +2,12 @@ using AutoMapper;
 using ClockAPI.Models;
 using ClockAPI.Models.DTOs;
 using ClockAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClockAPI.Controllers;
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class TimeEntriesController(ITimeEntryService timeEntryService) : Controller
 {
