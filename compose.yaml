@@ -25,6 +25,19 @@
     depends_on:
       - postgres
 
+  teamapi:
+    image: teamapi
+    build:
+      context: .
+      dockerfile: TeamAPI/Dockerfile
+    ports:
+      - "5198:5198"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=clockinoutdb;Username=postgres;Password=mysecretpassword
+    depends_on:
+      - postgres
+
   postgres:
     image: postgres:latest
     environment:
@@ -38,8 +51,3 @@
 
 volumes:
   postgres_data:
-  teamapi:
-    image: teamapi
-    build:
-      context: .
-      dockerfile: TeamAPI/Dockerfile
