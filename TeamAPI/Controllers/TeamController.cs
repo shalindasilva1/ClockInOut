@@ -18,7 +18,7 @@ public class TeamController(ITeamService teamService) : Controller
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<TeamDto>> GetTeam(int id)
+    public async Task<ActionResult<TeamDetailsDto>> GetTeam(int id)
     {
         try
         {
@@ -37,7 +37,7 @@ public class TeamController(ITeamService teamService) : Controller
         try
         {
             var team = await teamService.CreateTeamAsync(teamDto);
-            return CreatedAtAction(nameof(GetTeam), team);
+            return CreatedAtAction(nameof(GetTeam), new { id = team.Id }, team);
         }
         catch (Exception e)
         {

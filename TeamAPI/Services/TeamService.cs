@@ -32,10 +32,10 @@ public class TeamService(
         return mapper.Map<TeamDto>(team);
     }
 
-    public async Task<TeamDto> GetTeamByIdAsync(int id)
+    public async Task<TeamDetailsDto> GetTeamByIdAsync(int id)
     {
         var team = await teamRepository.GetByIdAsync(id);
-        return mapper.Map<TeamDto>(team);
+        return mapper.Map<TeamDetailsDto>(team);
     }
 
     public async Task<List<TeamDto>> GetAllTeamsAsync()

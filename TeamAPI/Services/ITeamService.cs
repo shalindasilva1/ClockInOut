@@ -5,7 +5,7 @@ namespace TeamAPI.Services;
 public interface ITeamService
 {
     Task<TeamDto> CreateTeamAsync(TeamDto teamDto);
-    Task<TeamDto> GetTeamByIdAsync(int id);
+    Task<TeamDetailsDto> GetTeamByIdAsync(int id);
     Task<List<TeamDto>> GetAllTeamsAsync();
     Task<TeamDto> UpdateTeamAsync(int id, TeamDto teamDto);
     Task DeleteTeamAsync(int id);
