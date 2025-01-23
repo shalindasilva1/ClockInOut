@@ -38,3 +38,8 @@
 
 volumes:
   postgres_data:
+  teamapi:
+    image: teamapi
+    build:
+      context: .
+      dockerfile: TeamAPI/Dockerfile
