@@ -99,8 +99,13 @@ public class UserService(
     public async Task<UserDto> UpdateUserAsync(int id, UserDto userDto)
     {
         var user = await userRepository.GetByIdAsync(id);
-        // user.Username = userDto.Username;
-        // user.PasswordHash = userDto.PasswordHash;
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+        
+        mapper.Map(userDto, user);
+        
         await userRepository.UpdateAsync(user);
         return mapper.Map<UserDto>(user);
     }
