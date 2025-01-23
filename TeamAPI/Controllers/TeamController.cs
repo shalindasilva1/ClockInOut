@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamAPI.Models.DTOs;
 using TeamAPI.Services;
@@ -5,8 +6,9 @@ using TeamAPI.Services;
 namespace TeamAPI.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
-public class TeamController(TeamService teamService) : Controller
+public class TeamController(ITeamService teamService) : Controller
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TeamDto>>> GetTeams()
