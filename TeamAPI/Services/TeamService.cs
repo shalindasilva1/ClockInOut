@@ -1,11 +1,9 @@
 using AutoMapper;
 using FluentValidation;
-using Grpc.Core;
 using TeamAPI.Models;
 using TeamAPI.Models.DTOs;
 using TeamAPI.Repositories;
-using Grpc.Net.Client;
-using UserAPI.Protos;
+
     
 namespace TeamAPI.Services;
 
@@ -93,25 +91,25 @@ public class TeamService(
         }
         
         // call user service using gRPC to check if user exists
-        try
-        {
-            var grpcHost = configuration["gRPC:Host"];
-            var channel = GrpcChannel.ForAddress(grpcHost);
-            var client = new UserGrpcService.UserGrpcServiceClient(channel);
-
-            // 2. gRPC Call
-            var response = await client.GetUserByIdAsync(new GetUserByIdRequest { Id = userId });
-
-            // 3. Check if User Exists (response will contain user details if found)
-            if (response.Id == 0) 
-            {
-                throw new Exception("User not found"); 
-            }
-        }
-        catch (RpcException ex)
-        {
-            throw new Exception("gRPC call failed", ex); 
-        }
+        // try
+        // {
+        //     var grpcHost = configuration["gRPC:Host"];
+        //     var channel = GrpcChannel.ForAddress(grpcHost);
+        //     var client = new UserGrpcService.UserGrpcServiceClient(channel);
+        //
+        //     // 2. gRPC Call
+        //     var response = await client.GetUserByIdAsync(new GetUserByIdRequest { Id = userId });
+        //
+        //     // 3. Check if User Exists (response will contain user details if found)
+        //     if (response.Id == 0) 
+        //     {
+        //         throw new Exception("User not found"); 
+        //     }
+        // }
+        // catch (RpcException ex)
+        // {
+        //     throw new Exception("gRPC call failed", ex); 
+        // }
         
         // 2. Add the user to the team
         await teamRepository.AddUserToTeamAsync(teamId, userId);
