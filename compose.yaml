@@ -5,11 +5,10 @@
       context: .
       dockerfile: ClockAPI/Dockerfile
     ports:
-      - "5010:80"
       - "5011:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_URLS=https://+
       - ASPNETCORE_HTTPS_PORTS=5011
       - ASPNETCORE_Kestrel__Certificates__Default__Password=ReplaceWithYourCertPass
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/ClockInOut.pfx
@@ -26,11 +25,10 @@
       context: .
       dockerfile: UserAPI/Dockerfile
     ports:
-      - "5020:80"
       - "5021:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_URLS=https://+
       - ASPNETCORE_HTTPS_PORTS=5021
       - ASPNETCORE_Kestrel__Certificates__Default__Password=ReplaceWithYourCertPass
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/ClockInOut.pfx
@@ -47,11 +45,10 @@
       context: .
       dockerfile: TeamAPI/Dockerfile
     ports:
-      - "5030:80"
       - "5031:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_URLS=https://+
       - ASPNETCORE_HTTPS_PORTS=5031
       - ASPNETCORE_Kestrel__Certificates__Default__Password=ReplaceWithYourCertPass
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/ClockInOut.pfx
