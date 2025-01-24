@@ -5,10 +5,18 @@
       context: .
       dockerfile: ClockAPI/Dockerfile
     ports:
-      - "5128:5128"
+      - "5010:80"
+      - "5011:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORTS=5011
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ReplaceWithYourCertPass
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/ClockInOut.pfx
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=clockinoutdb;Username=postgres;Password=mysecretpassword
+    volumes:
+      - ${HOME}/.aspnet/https:/https/
+      - ${HOME}/.aspnet/DataProtection-Keys:/home/app/.aspnet/DataProtection-Keys
     depends_on:
       - postgres
 
@@ -18,10 +26,18 @@
       context: .
       dockerfile: UserAPI/Dockerfile
     ports:
-      - "5203:5203"
+      - "5020:80"
+      - "5021:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORTS=5021
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ReplaceWithYourCertPass
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/ClockInOut.pfx
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=clockinoutdb;Username=postgres;Password=mysecretpassword
+    volumes:
+      - ${HOME}/.aspnet/https:/https/
+      - ${HOME}/.aspnet/DataProtection-Keys:/home/app/.aspnet/DataProtection-Keys
     depends_on:
       - postgres
 
@@ -31,10 +47,18 @@
       context: .
       dockerfile: TeamAPI/Dockerfile
     ports:
-      - "5198:5198"
+      - "5030:80"
+      - "5031:443"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+;http://+
+      - ASPNETCORE_HTTPS_PORTS=5031
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=ReplaceWithYourCertPass
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/ClockInOut.pfx
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=clockinoutdb;Username=postgres;Password=mysecretpassword
+    volumes:
+      - ${HOME}/.aspnet/https:/https/
+      - ${HOME}/.aspnet/DataProtection-Keys:/home/app/.aspnet/DataProtection-Keys
     depends_on:
       - postgres
 
