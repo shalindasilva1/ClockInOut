@@ -1,4 +1,5 @@
 using System.Text;
+using ClockInOut.Protos.User;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -44,6 +45,12 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddGrpcClient<gRPCService.gRPCServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["GrpcSettings:UserServiceUrl"]);
+});
+builder.Services.AddScoped<IUserGrpcService, UserGrpcService>();
 
 // Register the DbContext with PostgreSQL
 builder.Services.AddDbContext<ClockInOutDbContext>(options =>

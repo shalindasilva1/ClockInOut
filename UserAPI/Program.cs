@@ -49,6 +49,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<ClockInOutDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddGrpc();
+
 // Register the UserRepository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
@@ -94,5 +96,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+//app.MapGrpcService<UserGrpcService>();
 
 app.Run();

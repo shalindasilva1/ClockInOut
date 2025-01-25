@@ -2,7 +2,9 @@
 
 GET {{UserAPI_HostAddress}}/weatherforecast/
 Accept: application/json
+
 ###
 GET {{UserAPI_HostAddress}}/Users/username/
 Accept: application/json
+
 ###
