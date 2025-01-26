@@ -1,4 +1,3 @@
-using UserAPI.Models;
 using UserAPI.Models.DTOs;
 
 namespace UserAPI.Services;

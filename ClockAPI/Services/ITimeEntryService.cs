@@ -1,4 +1,3 @@
-using ClockAPI.Models;
 using ClockAPI.Models.DTOs;
 
 namespace ClockAPI.Services;

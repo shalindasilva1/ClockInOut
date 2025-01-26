@@ -1,5 +1,5 @@
-using UserAPI.Models.DTOs;
 using AutoMapper;
+using UserAPI.Models.DTOs;
 
 namespace UserAPI.Models;
 

@@ -30,7 +30,7 @@ public class TeamController(ITeamService teamService) : Controller
             return BadRequest(e.Message);
         }
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<TeamDto>> CreateTeam(TeamDto teamDto)
     {
@@ -44,7 +44,7 @@ public class TeamController(ITeamService teamService) : Controller
             return BadRequest(e.Message);
         }
     }
-    
+
     [HttpPut("{id}")]
     public async Task<ActionResult<TeamDto>> UpdateTeam(int id, TeamDto teamDto)
     {
@@ -58,7 +58,7 @@ public class TeamController(ITeamService teamService) : Controller
             return BadRequest(e.Message);
         }
     }
-    
+
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTeam(int id)
     {
@@ -72,7 +72,7 @@ public class TeamController(ITeamService teamService) : Controller
             return BadRequest(e.Message);
         }
     }
-    
+
     [HttpPost("{id}/{userId}")]
     public async Task<ActionResult> AddUserToTeam(int id, int userId)
     {
@@ -86,7 +86,7 @@ public class TeamController(ITeamService teamService) : Controller
             return BadRequest(e.Message);
         }
     }
-    
+
     [HttpDelete("{id}/{userId}")]
     public async Task<ActionResult> RemoveUserFromTeam(int id, int userId)
     {

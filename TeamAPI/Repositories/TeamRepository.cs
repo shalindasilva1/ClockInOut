@@ -15,7 +15,7 @@ public class TeamRepository(ClockInOutDbContext dbContext) : ITeamRepository
     public async Task<List<Team>> GetAllAsync()
     {
         return await dbContext.TeamEntries
-            .Include(t => t.TeamMembers) 
+            .Include(t => t.TeamMembers)
             .ToListAsync();
     }
 
