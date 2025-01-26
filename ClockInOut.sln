@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockInOut.AppHost", "Clock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockInOut.ServiceDefaults", "ClockInOut.ServiceDefaults\ClockInOut.ServiceDefaults.csproj", "{FC4DEA63-7C7C-4777-A43E-5E48F9ABB98D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockAPI.MigrationService", "ClockAPI.MigrationService\ClockAPI.MigrationService.csproj", "{00C6E3AF-0351-471C-8401-0A81B139DE65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{FC4DEA63-7C7C-4777-A43E-5E48F9ABB98D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC4DEA63-7C7C-4777-A43E-5E48F9ABB98D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC4DEA63-7C7C-4777-A43E-5E48F9ABB98D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00C6E3AF-0351-471C-8401-0A81B139DE65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00C6E3AF-0351-471C-8401-0A81B139DE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00C6E3AF-0351-471C-8401-0A81B139DE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00C6E3AF-0351-471C-8401-0A81B139DE65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
