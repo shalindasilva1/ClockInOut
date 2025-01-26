@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockAPI", "ClockAPI\ClockA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamAPI", "TeamAPI\TeamAPI.csproj", "{09684F70-AD83-4D22-860C-A6300A803241}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockInOut.Aspire", "ClockInOut.Aspire\ClockInOut.Aspire.csproj", "{982CBB04-A076-44BF-80BB-B27A92CAE497}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,9 +30,5 @@ Global
 		{09684F70-AD83-4D22-860C-A6300A803241}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09684F70-AD83-4D22-860C-A6300A803241}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09684F70-AD83-4D22-860C-A6300A803241}.Release|Any CPU.Build.0 = Release|Any CPU
-		{982CBB04-A076-44BF-80BB-B27A92CAE497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{982CBB04-A076-44BF-80BB-B27A92CAE497}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{982CBB04-A076-44BF-80BB-B27A92CAE497}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{982CBB04-A076-44BF-80BB-B27A92CAE497}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
