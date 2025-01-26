@@ -46,8 +46,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Register the DbContext with PostgreSQL
-builder.Services.AddDbContext<ClockInOutDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.AddNpgsqlDbContext<ClockInOutDbContext>(connectionName: "userDb");
 
 builder.Services.AddGrpc();
 
