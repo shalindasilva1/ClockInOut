@@ -48,4 +48,9 @@
     <ItemGroup>
         <Folder Include="Protos\Generated\" />
     </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\ClockInOut.ServiceDefaults\ClockInOut.ServiceDefaults.csproj" />
+    </ItemGroup>
 </Project>

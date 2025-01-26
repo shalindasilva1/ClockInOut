@@ -34,4 +34,8 @@
     <ItemGroup>
         <Protobuf Include="Protos\user.proto" GrpcServices="Client" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ClockInOut.ServiceDefaults\ClockInOut.ServiceDefaults.csproj" />
+    </ItemGroup>
 </Project>
