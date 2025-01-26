@@ -42,4 +42,9 @@
     <ItemGroup>
         <Protobuf Include="Protos\user.proto" GrpcServices="Server" />
     </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="Protos\Generated\" />
+    </ItemGroup>
 </Project>

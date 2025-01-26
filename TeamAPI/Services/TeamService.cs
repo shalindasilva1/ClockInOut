@@ -1,6 +1,5 @@
 using AutoMapper;
 using FluentValidation;
-using Grpc.Core;
 using TeamAPI.Models;
 using TeamAPI.Models.DTOs;
 using TeamAPI.Repositories;
@@ -10,9 +9,7 @@ namespace TeamAPI.Services;
 
 public class TeamService(
     ITeamRepository teamRepository,
-    IMapper mapper,
-    IConfiguration configuration,
-    IUserGrpcService userGrpcService
+    IMapper mapper
 ) : ITeamService
 {
     public async Task<TeamDto> CreateTeamAsync(TeamDto teamDto)
@@ -93,19 +90,19 @@ public class TeamService(
         }
         
         //call user service using gRPC to check if user exists
-        try
-        {
-            var userExists = await userGrpcService.CheckUserExistsAsync(userId);
-            // Check if User Exists (response will contain user details if found)
-            if (!userExists)
-            {
-                throw new Exception("User not found");
-            }
-        }
-        catch (RpcException ex)
-        {
-            throw new Exception("gRPC call failed", ex); 
-        }
+        // try
+        // {
+        //     var userExists = await userGrpcService.CheckUserExistsAsync(userId);
+        //     // Check if User Exists (response will contain user details if found)
+        //     if (!userExists)
+        //     {
+        //         throw new Exception("User not found");
+        //     }
+        // }
+        // catch (RpcException ex)
+        // {
+        //     throw new Exception("gRPC call failed", ex); 
+        // }
         
         // 2. Add the user to the team
         await teamRepository.AddUserToTeamAsync(teamId, userId);
