@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAPI", "UserAPI\UserAPI.csproj", "{DF703A0E-8E25-4CE6-98A5-76B1E352512E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockAPI", "ClockAPI\ClockAPI.csproj", "{C75EC099-FF53-42BB-AF0F-7D612B22072E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamAPI", "TeamAPI\TeamAPI.csproj", "{09684F70-AD83-4D22-860C-A6300A803241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClockInOut.Aspire", "ClockInOut.Aspire\ClockInOut.Aspire.csproj", "{982CBB04-A076-44BF-80BB-B27A92CAE497}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF703A0E-8E25-4CE6-98A5-76B1E352512E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF703A0E-8E25-4CE6-98A5-76B1E352512E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF703A0E-8E25-4CE6-98A5-76B1E352512E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF703A0E-8E25-4CE6-98A5-76B1E352512E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C75EC099-FF53-42BB-AF0F-7D612B22072E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C75EC099-FF53-42BB-AF0F-7D612B22072E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C75EC099-FF53-42BB-AF0F-7D612B22072E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C75EC099-FF53-42BB-AF0F-7D612B22072E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09684F70-AD83-4D22-860C-A6300A803241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09684F70-AD83-4D22-860C-A6300A803241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09684F70-AD83-4D22-860C-A6300A803241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09684F70-AD83-4D22-860C-A6300A803241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{982CBB04-A076-44BF-80BB-B27A92CAE497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{982CBB04-A076-44BF-80BB-B27A92CAE497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{982CBB04-A076-44BF-80BB-B27A92CAE497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{982CBB04-A076-44BF-80BB-B27A92CAE497}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
