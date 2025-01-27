@@ -19,4 +19,8 @@ builder.AddProject<UserAPI>("UserAPI")
 builder.AddProject<TeamAPI>("TeamAPI")
     .WithReference(teamDb);
 
+builder.AddProject<ClockAPI_MigrationService>("clockMigrationService")
+    .WaitFor(clockDb)
+    .WithReference(clockDb);
+
 builder.Build().Run();

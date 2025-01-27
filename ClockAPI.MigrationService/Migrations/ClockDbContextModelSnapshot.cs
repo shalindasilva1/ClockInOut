@@ -3,20 +3,17 @@ using System;
 using ClockAPI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace ClockAPI.Migrations
+namespace ClockAPI.MigrationService.Migrations
 {
-    [DbContext(typeof(ClockInOutDbContext))]
-    [Migration("20250120091314_InitialCreate")]
-    partial class InitialCreate
+    [DbContext(typeof(ClockDbContext))]
+    partial class ClockDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

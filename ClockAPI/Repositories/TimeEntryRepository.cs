@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClockAPI.Repositories;
 
-public class TimeEntryRepository(ClockInOutDbContext dbContext) : ITimeEntryRepository
+public class TimeEntryRepository(ClockDbContext dbContext) : ITimeEntryRepository
 {
-    private readonly ClockInOutDbContext _dbContext = dbContext;
+    private readonly ClockDbContext _dbContext = dbContext;
 
     public async Task<TimeEntry> GetByIdAsync(int id)
     {
