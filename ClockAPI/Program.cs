@@ -13,6 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.AddRedisOutputCache("cache");
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -49,7 +50,6 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Register the DbContext with PostgreSQL
-//builder.AddNpgsqlDbContext<ClockDbContext>(connectionName: "clockDb");
 builder.Services.AddDbContextPool<ClockDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("clockDb"), sqlOptions =>
     {
@@ -101,5 +101,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseOutputCache();
 
 app.Run();
