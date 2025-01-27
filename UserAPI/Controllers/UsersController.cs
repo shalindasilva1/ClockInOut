@@ -69,7 +69,6 @@ public class UsersController(IUserService userService) : Controller
     /// </summary>
     /// <param name="user">The user data to create.</param>
     /// <returns>The created user.</returns>
-    [Authorize]
     [HttpPost]
     public async Task<ActionResult<UserDto>> PostUser(UserDtoCreate user)
     {

@@ -3,9 +3,9 @@ using TeamAPI.Models;
 
 namespace TeamAPI;
 
-public class ClockInOutDbContext : DbContext
+public class TeamDbContext : DbContext
 {
-    public ClockInOutDbContext(DbContextOptions<ClockInOutDbContext> options) : base(options)
+    public TeamDbContext(DbContextOptions<TeamDbContext> options) : base(options)
     {
     }
 

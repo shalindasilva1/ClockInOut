@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClockAPI;
 
-public class ClockInOutDbContext : DbContext
+public class ClockDbContext : DbContext
 {
-    public ClockInOutDbContext(DbContextOptions<ClockInOutDbContext> options) : base(options)
+    public ClockDbContext(DbContextOptions<ClockDbContext> options) : base(options)
     {
     }
 

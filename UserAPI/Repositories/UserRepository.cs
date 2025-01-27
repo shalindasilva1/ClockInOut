@@ -3,9 +3,9 @@ using UserAPI.Models;
 
 namespace UserAPI.Repositories;
 
-public class UserRepository(ClockInOutDbContext dbContext) : IUserRepository
+public class UserRepository(UserDbContext dbContext) : IUserRepository
 {
-    private readonly ClockInOutDbContext _dbContext = dbContext;
+    private readonly UserDbContext _dbContext = dbContext;
 
     public async Task<User> GetByIdAsync(int id)
     {
