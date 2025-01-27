@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-TeamAPI.MigrationService-4ad3a263-2901-4eb8-95d5-ea962a2afc7e</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ClockInOut.ServiceDefaults\ClockInOut.ServiceDefaults.csproj" />
+      <ProjectReference Include="..\TeamAPI\TeamAPI.csproj" />
+    </ItemGroup>
+</Project>

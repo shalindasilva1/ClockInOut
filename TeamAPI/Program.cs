@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using TeamAPI;
 using TeamAPI.Repositories;
 using TeamAPI.Services;
@@ -48,7 +49,15 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Register the DbContext with PostgreSQL
-builder.AddNpgsqlDbContext<ClockInOutDbContext>(connectionName: "teamDb");
+builder.Services.AddDbContextPool<TeamDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("teamDb"), sqlOptions =>
+    {
+        sqlOptions.MigrationsAssembly("TeamAPI.MigrationService");
+        sqlOptions.ExecutionStrategy(c => new NpgsqlRetryingExecutionStrategy(c));
+    }));
+builder.EnrichNpgsqlDbContext<TeamDbContext>(settings =>
+    // Disable Aspire default retries as we're using a custom execution strategy
+    settings.DisableRetry = true);
 
 // Register the UserRepository
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace ClockAPI.MigrationService;
+namespace TeamAPI.MigrationService;
 
 public class Worker(
     IServiceProvider serviceProvider,
@@ -11,15 +11,16 @@ public class Worker(
     IHostApplicationLifetime hostApplicationLifetime) : BackgroundService
 {
     private readonly ActivitySource _activitySource = new(hostEnvironment.ApplicationName);
-    
+
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        
         using var activity = _activitySource.StartActivity(hostEnvironment.ApplicationName, ActivityKind.Client);
 
         try
         {
             using var scope = serviceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ClockDbContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<TeamDbContext>();
 
             await EnsureDatabaseAsync(dbContext, cancellationToken);
             await RunMigrationAsync(dbContext, cancellationToken);
@@ -32,7 +33,8 @@ public class Worker(
 
         hostApplicationLifetime.StopApplication();
     }
-    private static async Task EnsureDatabaseAsync(ClockDbContext dbContext, CancellationToken cancellationToken)
+    
+    private static async Task EnsureDatabaseAsync(TeamDbContext dbContext, CancellationToken cancellationToken)
     {
         var dbCreator = dbContext.GetService<IRelationalDatabaseCreator>();
 
@@ -47,7 +49,7 @@ public class Worker(
             }
         });
     }
-    private static async Task RunMigrationAsync(ClockDbContext dbContext, CancellationToken cancellationToken)
+    private static async Task RunMigrationAsync(TeamDbContext dbContext, CancellationToken cancellationToken)
     {
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
@@ -57,23 +59,4 @@ public class Worker(
         });
     }
 
-    // private static async Task SeedDataAsync(ClockInOutDbContext dbContext, CancellationToken cancellationToken)
-    // {
-    //     SupportTicket firstTicket = new()
-    //     {
-    //         Title = "Test Ticket",
-    //         Description = "Default ticket, please ignore!",
-    //         Completed = true
-    //     };
-    //
-    //     var strategy = dbContext.Database.CreateExecutionStrategy();
-    //     await strategy.ExecuteAsync(async () =>
-    //     {
-    //         // Seed the database
-    //         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
-    //         await dbContext.Tickets.AddAsync(firstTicket, cancellationToken);
-    //         await dbContext.SaveChangesAsync(cancellationToken);
-    //         await transaction.CommitAsync(cancellationToken);
-    //     });
-    // }
 }

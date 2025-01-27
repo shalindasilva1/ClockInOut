@@ -3,7 +3,7 @@ using TeamAPI.Models;
 
 namespace TeamAPI.Repositories;
 
-public class TeamRepository(ClockInOutDbContext dbContext) : ITeamRepository
+public class TeamRepository(TeamDbContext dbContext) : ITeamRepository
 {
     public async Task<Team> GetByIdAsync(int id)
     {
