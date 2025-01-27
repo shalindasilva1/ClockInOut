@@ -14,7 +14,8 @@ public class UserDtoValidator : AbstractValidator<UserDtoCreate>
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.")
-            .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,100}$").WithMessage("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")
+            .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,100}$").WithMessage(
+                "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")
             .MinimumLength(6).WithMessage("Password must be at least 6 characters long.")
             .MaximumLength(100).WithMessage("Password cannot exceed 100 characters.");
 

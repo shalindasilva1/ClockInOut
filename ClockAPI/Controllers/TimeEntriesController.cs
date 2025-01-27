@@ -6,16 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClockAPI.Controllers;
 
 /// <summary>
-/// Controller for managing time entries.
+///     Controller for managing time entries.
 /// </summary>
 [ApiController]
 [Authorize]
 [Route("[controller]")]
 public class TimeEntriesController(ITimeEntryService timeEntryService) : Controller
 {
-
     /// <summary>
-    /// Gets all time entries.
+    ///     Gets all time entries.
     /// </summary>
     /// <returns>A list of time entries.</returns>
     [HttpGet]
@@ -33,7 +32,7 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
     }
 
     /// <summary>
-    /// Gets a specific time entry by ID.
+    ///     Gets a specific time entry by ID.
     /// </summary>
     /// <param name="id">The ID of the time entry.</param>
     /// <returns>The time entry with the specified ID.</returns>
@@ -52,7 +51,7 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
     }
 
     /// <summary>
-    /// Gets time entries for a specific user by user ID.
+    ///     Gets time entries for a specific user by user ID.
     /// </summary>
     /// <param name="userId">The ID of the user.</param>
     /// <returns>A list of time entries for the specified user.</returns>
@@ -71,17 +70,14 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
     }
 
     /// <summary>
-    /// Creates a new time entry.
+    ///     Creates a new time entry.
     /// </summary>
     /// <param name="timeEntry">The time entry to create.</param>
     /// <returns>The created time entry.</returns>
     [HttpPost]
     public async Task<ActionResult<TimeEntryDto>> PostTimeEntry(TimeEntryDto timeEntry)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
+        if (!ModelState.IsValid) return BadRequest();
 
         try
         {
@@ -95,7 +91,7 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
     }
 
     /// <summary>
-    /// Updates an existing time entry.
+    ///     Updates an existing time entry.
     /// </summary>
     /// <param name="id">The ID of the time entry to update.</param>
     /// <param name="timeEntry">The updated time entry.</param>
@@ -103,10 +99,7 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
     [HttpPut("{id}")]
     public async Task<IActionResult> PutTimeEntry(int id, TimeEntryDto timeEntry)
     {
-        if (id != timeEntry.Id)
-        {
-            return BadRequest();
-        }
+        if (id != timeEntry.Id) return BadRequest();
 
         try
         {
@@ -120,7 +113,7 @@ public class TimeEntriesController(ITimeEntryService timeEntryService) : Control
     }
 
     /// <summary>
-    /// Deletes a specific time entry by ID.
+    ///     Deletes a specific time entry by ID.
     /// </summary>
     /// <param name="id">The ID of the time entry to delete.</param>
     /// <returns>No content.</returns>

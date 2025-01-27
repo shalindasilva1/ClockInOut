@@ -8,8 +8,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -25,7 +28,7 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
-        BearerFormat = "JWT" 
+        BearerFormat = "JWT"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -46,8 +49,16 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Register the DbContext with PostgreSQL
-builder.Services.AddDbContext<ClockInOutDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+//builder.AddNpgsqlDbContext<ClockDbContext>(connectionName: "clockDb");
+builder.Services.AddDbContextPool<ClockDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("clockDb"), sqlOptions =>
+    {
+        sqlOptions.MigrationsAssembly("ClockAPI.MigrationService");
+        sqlOptions.ExecutionStrategy(c => new NpgsqlRetryingExecutionStrategy(c));
+    }));
+builder.EnrichNpgsqlDbContext<ClockDbContext>(settings =>
+    // Disable Aspire default retries as we're using a custom execution strategy
+    settings.DisableRetry = true);
 
 // Register the TimeEntryRepository
 builder.Services.AddScoped<ITimeEntryRepository, TimeEntryRepository>();
@@ -68,9 +79,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"], // Same as User API's issuer
-            ValidAudience = builder.Configuration["Jwt:Audience"], // Same as User API's audience
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])) // Same as User API's key
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
 
@@ -83,15 +94,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClockAPI v1");
-    });
+    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClockAPI v1"); });
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

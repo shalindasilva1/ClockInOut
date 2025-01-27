@@ -42,4 +42,3 @@ public class TimeEntryService(
         await timeEntryRepository.DeleteAsync(id);
     }
 }
-

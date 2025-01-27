@@ -6,14 +6,14 @@ using UserAPI.Services;
 namespace UserAPI.Controllers;
 
 /// <summary>
-/// UsersController handles user-related operations such as retrieving, creating, updating, and deleting users.
+///     UsersController handles user-related operations such as retrieving, creating, updating, and deleting users.
 /// </summary>
 [ApiController]
 [Route("[controller]")]
 public class UsersController(IUserService userService) : Controller
 {
     /// <summary>
-    /// Retrieves all users.
+    ///     Retrieves all users.
     /// </summary>
     /// <returns>A list of users.</returns>
     [Authorize]
@@ -25,7 +25,7 @@ public class UsersController(IUserService userService) : Controller
     }
 
     /// <summary>
-    /// Retrieves a user by ID.
+    ///     Retrieves a user by ID.
     /// </summary>
     /// <param name="id">The ID of the user to retrieve.</param>
     /// <returns>The user with the specified ID.</returns>
@@ -45,7 +45,7 @@ public class UsersController(IUserService userService) : Controller
     }
 
     /// <summary>
-    /// Retrieves a user by username.
+    ///     Retrieves a user by username.
     /// </summary>
     /// <param name="username">The username of the user to retrieve.</param>
     /// <returns>The user with the specified username.</returns>
@@ -65,18 +65,14 @@ public class UsersController(IUserService userService) : Controller
     }
 
     /// <summary>
-    /// Creates a new user.
+    ///     Creates a new user.
     /// </summary>
     /// <param name="user">The user data to create.</param>
     /// <returns>The created user.</returns>
-    [Authorize]
     [HttpPost]
     public async Task<ActionResult<UserDto>> PostUser(UserDtoCreate user)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
+        if (!ModelState.IsValid) return BadRequest();
         try
         {
             var result = await userService.RegisterUserAsync(user);
@@ -89,7 +85,7 @@ public class UsersController(IUserService userService) : Controller
     }
 
     /// <summary>
-    /// Updates an existing user.
+    ///     Updates an existing user.
     /// </summary>
     /// <param name="id">The ID of the user to update.</param>
     /// <param name="user">The updated user data.</param>
@@ -98,10 +94,7 @@ public class UsersController(IUserService userService) : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> PutUser(int id, UserDto user)
     {
-        if (id != user.Id)
-        {
-            return BadRequest();
-        }
+        if (id != user.Id) return BadRequest();
 
         try
         {
@@ -115,7 +108,7 @@ public class UsersController(IUserService userService) : Controller
     }
 
     /// <summary>
-    /// Deletes a user by ID.
+    ///     Deletes a user by ID.
     /// </summary>
     /// <param name="id">The ID of the user to delete.</param>
     /// <returns>No content if the deletion is successful.</returns>
@@ -135,7 +128,7 @@ public class UsersController(IUserService userService) : Controller
     }
 
     /// <summary>
-    /// Authenticates a user and returns a JWT token.
+    ///     Authenticates a user and returns a JWT token.
     /// </summary>
     /// <param name="user">The user login data.</param>
     /// <returns>A JWT token if the login is successful.</returns>

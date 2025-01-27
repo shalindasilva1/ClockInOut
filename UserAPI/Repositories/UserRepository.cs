@@ -3,13 +3,13 @@ using UserAPI.Models;
 
 namespace UserAPI.Repositories;
 
-public class UserRepository(ClockInOutDbContext dbContext) : IUserRepository
+public class UserRepository(UserDbContext dbContext) : IUserRepository
 {
-    private readonly ClockInOutDbContext _dbContext = dbContext;
-    
+    private readonly UserDbContext _dbContext = dbContext;
+
     public async Task<User> GetByIdAsync(int id)
     {
-        var result = await _dbContext.UserEntries.FindAsync(id) 
+        var result = await _dbContext.UserEntries.FindAsync(id)
                      ?? throw new Exception("User entry not found");
         return result;
     }
@@ -17,12 +17,12 @@ public class UserRepository(ClockInOutDbContext dbContext) : IUserRepository
     public async Task<User> GetByUsernameAsync(string username)
     {
         var result = await _dbContext.UserEntries
-                        .Where(u => u.Username == username)
-                        .FirstOrDefaultAsync()
+                         .Where(u => u.Username == username)
+                         .FirstOrDefaultAsync()
                      ?? throw new Exception("User entry not found");
         return result;
     }
-    
+
     public async Task<User> GetByEmailAsync(string userDtoEmail)
     {
         var result = await _dbContext.UserEntries
@@ -35,8 +35,8 @@ public class UserRepository(ClockInOutDbContext dbContext) : IUserRepository
     public async Task<User?> CheckUserAvailability(string username, string email)
     {
         var result = await _dbContext.UserEntries
-                         .Where(u => u.Username == username || u.Email == email)
-                         .FirstOrDefaultAsync();
+            .Where(u => u.Username == username || u.Email == email)
+            .FirstOrDefaultAsync();
         return result;
     }
 
@@ -53,7 +53,7 @@ public class UserRepository(ClockInOutDbContext dbContext) : IUserRepository
 
     public async Task UpdateAsync(User user)
     {
-        _dbContext.UserEntries.Update(user); 
+        _dbContext.UserEntries.Update(user);
         await _dbContext.SaveChangesAsync();
     }
 

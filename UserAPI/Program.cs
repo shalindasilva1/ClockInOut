@@ -1,20 +1,24 @@
 using System.Text;
-using UserAPI;
-using UserAPI.Repositories;
-using UserAPI.Services;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using UserAPI;
+using UserAPI.Repositories;
+using UserAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "UserAPI", Version = "v1" });
@@ -25,7 +29,7 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
-        BearerFormat = "JWT" 
+        BearerFormat = "JWT"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -46,8 +50,17 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Register the DbContext with PostgreSQL
-builder.Services.AddDbContext<ClockInOutDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContextPool<UserDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("userDb"), sqlOptions =>
+    {
+        sqlOptions.MigrationsAssembly("UserAPI.MigrationService");
+        sqlOptions.ExecutionStrategy(c => new NpgsqlRetryingExecutionStrategy(c));
+    }));
+builder.EnrichNpgsqlDbContext<UserDbContext>(settings =>
+    // Disable Aspire default retries as we're using a custom execution strategy
+    settings.DisableRetry = true);
+
+//builder.Services.AddGrpc();
 
 // Register the UserRepository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -84,15 +97,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "UserAPI v1");
-    });
+    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "UserAPI v1"); });
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClockAPI.Repositories;
 
-public class TimeEntryRepository(ClockInOutDbContext dbContext) : ITimeEntryRepository
+public class TimeEntryRepository(ClockDbContext dbContext) : ITimeEntryRepository
 {
-    private readonly ClockInOutDbContext _dbContext = dbContext;
-    
+    private readonly ClockDbContext _dbContext = dbContext;
+
     public async Task<TimeEntry> GetByIdAsync(int id)
     {
-        var result = await _dbContext.TimeEntries.FindAsync(id) 
-             ?? throw new Exception("Time entry not found");
+        var result = await _dbContext.TimeEntries.FindAsync(id)
+                     ?? throw new Exception("Time entry not found");
         return result;
     }
 
@@ -25,7 +25,7 @@ public class TimeEntryRepository(ClockInOutDbContext dbContext) : ITimeEntryRepo
             .Where(t => t.UserId == userId)
             .ToListAsync();
     }
-    
+
     public async Task AddAsync(TimeEntry timeEntry)
     {
         _dbContext.TimeEntries.Add(timeEntry);
@@ -34,7 +34,7 @@ public class TimeEntryRepository(ClockInOutDbContext dbContext) : ITimeEntryRepo
 
     public async Task UpdateAsync(TimeEntry timeEntry)
     {
-        _dbContext.TimeEntries.Update(timeEntry); 
+        _dbContext.TimeEntries.Update(timeEntry);
         await _dbContext.SaveChangesAsync();
     }
 
