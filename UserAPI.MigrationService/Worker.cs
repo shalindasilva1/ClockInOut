@@ -1,24 +1,62 @@
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+
 namespace UserAPI.MigrationService;
 
-public class Worker : BackgroundService
+public class Worker(
+    IServiceProvider serviceProvider,
+    IHostEnvironment hostEnvironment,
+    IHostApplicationLifetime hostApplicationLifetime) : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ActivitySource _activitySource = new(hostEnvironment.ApplicationName);
 
-    public Worker(ILogger<Worker> logger)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        _logger = logger;
-    }
+        
+        using var activity = _activitySource.StartActivity(hostEnvironment.ApplicationName, ActivityKind.Client);
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        while (!stoppingToken.IsCancellationRequested)
+        try
         {
-            if (_logger.IsEnabled(LogLevel.Information))
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }
+            using var scope = serviceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
 
-            await Task.Delay(1000, stoppingToken);
+            await EnsureDatabaseAsync(dbContext, cancellationToken);
+            await RunMigrationAsync(dbContext, cancellationToken);
         }
+        catch (Exception ex)
+        {
+            activity?.AddException(ex);
+            throw;
+        }
+
+        hostApplicationLifetime.StopApplication();
     }
+    
+    private static async Task EnsureDatabaseAsync(UserDbContext dbContext, CancellationToken cancellationToken)
+    {
+        var dbCreator = dbContext.GetService<IRelationalDatabaseCreator>();
+
+        var strategy = dbContext.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
+        {
+            // Create the database if it does not exist.
+            // Do this first so there is then a database to start a transaction against.
+            if (!await dbCreator.ExistsAsync(cancellationToken))
+            {
+                await dbCreator.CreateAsync(cancellationToken);
+            }
+        });
+    }
+    private static async Task RunMigrationAsync(UserDbContext dbContext, CancellationToken cancellationToken)
+    {
+        var strategy = dbContext.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
+        {
+            // Run migration in a transaction to avoid partial migration if it fails.
+            await dbContext.Database.MigrateAsync(cancellationToken);
+        });
+    }
+
 }

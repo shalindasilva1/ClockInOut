@@ -3,9 +3,9 @@ using UserAPI.Models;
 
 namespace UserAPI;
 
-public class ClockInOutDbContext : DbContext
+public class UserDbContext : DbContext
 {
-    public ClockInOutDbContext(DbContextOptions<ClockInOutDbContext> options) : base(options)
+    public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
     {
     }
 

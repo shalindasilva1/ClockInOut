@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using UserAPI;
 using UserAPI.Repositories;
 using UserAPI.Services;
@@ -49,9 +50,17 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Register the DbContext with PostgreSQL
-builder.AddNpgsqlDbContext<ClockInOutDbContext>(connectionName: "userDb");
+builder.Services.AddDbContextPool<UserDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("userDb"), sqlOptions =>
+    {
+        sqlOptions.MigrationsAssembly("UserAPI.MigrationService");
+        sqlOptions.ExecutionStrategy(c => new NpgsqlRetryingExecutionStrategy(c));
+    }));
+builder.EnrichNpgsqlDbContext<UserDbContext>(settings =>
+    // Disable Aspire default retries as we're using a custom execution strategy
+    settings.DisableRetry = true);
 
-builder.Services.AddGrpc();
+//builder.Services.AddGrpc();
 
 // Register the UserRepository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
