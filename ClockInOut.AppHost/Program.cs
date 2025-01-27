@@ -2,6 +2,8 @@ using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
+var redis = builder.AddRedis("cache");
+
 var username = builder.AddParameter("username", secret: true);
 var password = builder.AddParameter("password", secret: true);
 
@@ -14,10 +16,13 @@ var userDb = postgres.AddDatabase("userDb");
 var teamDb = postgres.AddDatabase("teamDb");
 
 builder.AddProject<ClockAPI>("ClockAPI")
+    .WithReference(redis)
     .WithReference(clockDb);
 builder.AddProject<UserAPI>("UserAPI")
+    .WithReference(redis)
     .WithReference(userDb);
 builder.AddProject<TeamAPI>("TeamAPI")
+    .WithReference(redis)
     .WithReference(teamDb);
 
 builder.AddProject<ClockAPI_MigrationService>("clockMigrationService")

@@ -1,5 +1,7 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 using UserAPI.Models.DTOs;
 using UserAPI.Services;
 
@@ -10,8 +12,13 @@ namespace UserAPI.Controllers;
 /// </summary>
 [ApiController]
 [Route("[controller]")]
-public class UsersController(IUserService userService) : Controller
+public class UsersController(
+    IUserService userService,
+    IConnectionMultiplexer redis) : Controller
 {
+    private readonly IDatabase _cache = redis.GetDatabase();
+    private const int CacheExpirationInSeconds = 60; // Cache expiration time (1 minute)
+
     /// <summary>
     ///     Retrieves all users.
     /// </summary>
@@ -20,7 +27,23 @@ public class UsersController(IUserService userService) : Controller
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
     {
+        const string cacheKey = "users:all";
+        
+        // Check if data exists in Redis cache
+        var cachedData = await _cache.StringGetAsync(cacheKey);
+        if (!cachedData.IsNullOrEmpty)
+        {
+            var cachedUsers = JsonSerializer.Deserialize<IEnumerable<UserDto>>(cachedData);
+            return Ok(cachedUsers);
+        }
+
+        // Retrieve data from the database if not in cache
         var users = await userService.GetAllUsersAsync();
+
+        // Cache the response
+        var serializedUsers = JsonSerializer.Serialize(users);
+        await _cache.StringSetAsync(cacheKey, serializedUsers, TimeSpan.FromSeconds(CacheExpirationInSeconds));
+
         return Ok(users);
     }
 
@@ -33,9 +56,25 @@ public class UsersController(IUserService userService) : Controller
     [HttpGet("{id}")]
     public async Task<ActionResult<UserDto>> GetUser(int id)
     {
+        var cacheKey = $"users:{id}";
+        
+        // Check if data exists in Redis cache
+        var cachedData = await _cache.StringGetAsync(cacheKey);
+        if (!cachedData.IsNullOrEmpty)
+        {
+            var cachedUser = JsonSerializer.Deserialize<UserDto>(cachedData);
+            return Ok(cachedUser);
+        }
+
         try
         {
+            // Retrieve data from the database if not in cache
             var user = await userService.GetUserByIdAsync(id);
+
+            // Cache the response
+            var serializedUser = JsonSerializer.Serialize(user);
+            await _cache.StringSetAsync(cacheKey, serializedUser, TimeSpan.FromSeconds(CacheExpirationInSeconds));
+
             return Ok(user);
         }
         catch (Exception e)
@@ -53,9 +92,25 @@ public class UsersController(IUserService userService) : Controller
     [HttpGet("username/{username}")]
     public async Task<ActionResult<UserDto>> GetUserByUsername(string username)
     {
+        var cacheKey = $"users:username:{username}";
+        
+        // Check if data exists in Redis cache
+        var cachedData = await _cache.StringGetAsync(cacheKey);
+        if (!cachedData.IsNullOrEmpty)
+        {
+            var cachedUser = JsonSerializer.Deserialize<UserDto>(cachedData);
+            return Ok(cachedUser);
+        }
+
         try
         {
+            // Retrieve data from the database if not in cache
             var user = await userService.GetUserByUsernameAsync(username);
+
+            // Cache the response
+            var serializedUser = JsonSerializer.Serialize(user);
+            await _cache.StringSetAsync(cacheKey, serializedUser, TimeSpan.FromSeconds(CacheExpirationInSeconds));
+
             return Ok(user);
         }
         catch (Exception e)
