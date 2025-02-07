@@ -1,13 +1,11 @@
 using ClockAPI.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace ClockAPI;
-
-public class ClockDbContext : DbContext
-{
-    public ClockDbContext(DbContextOptions<ClockDbContext> options) : base(options)
+    using Microsoft.EntityFrameworkCore;
+    
+    namespace ClockAPI;
+    
+    public class ClockDbContext : DbContext
     {
+        public ClockDbContext(DbContextOptions<ClockDbContext> options) : base(options) { }
+    
+        public DbSet<TimeEntry> TimeEntries { get; set; }
     }
-
-    public DbSet<TimeEntry> TimeEntries { get; set; }
-}
