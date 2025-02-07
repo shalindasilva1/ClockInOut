@@ -33,7 +33,7 @@ builder.Services.AddDbContextPool<ClockDbContext>(options =>
     {
         // Specify the migrations assembly
         sqlOptions.MigrationsAssembly("ClockAPI.MigrationService");
-        // Use a retrying execution strategy for PostgreSQL
+        // Use a retrying execution strategy for PostgreSQL TODO: remove this when Aspire supports it
         sqlOptions.ExecutionStrategy(c => new NpgsqlRetryingExecutionStrategy(c));
     }));
 
@@ -88,5 +88,4 @@ app.MapControllers();
 // Use output cache middleware
 app.UseOutputCache();
 
-// Run the application
 app.Run();
