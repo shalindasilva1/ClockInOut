@@ -19,8 +19,6 @@ public class Team
     /// <summary>
     /// Gets or sets the team name.
     /// </summary>
-    [Required]
-    [MaxLength(100)]
     public string Name { get; set; }
 
     /// <summary>
@@ -44,18 +42,15 @@ public class TeamMember
     /// <summary>
     /// Gets or sets the team ID.
     /// </summary>
-    [Required]
     public int TeamId { get; set; }
 
     /// <summary>
     /// Gets or sets the team.
     /// </summary>
-    [ForeignKey(nameof(TeamId))]
     public Team Team { get; set; }
 
     /// <summary>
     /// Gets or sets the user ID.
     /// </summary>
-    [Required]
     public int UserId { get; set; }
 }
